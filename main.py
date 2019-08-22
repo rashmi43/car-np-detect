@@ -1,6 +1,7 @@
 import cv2
 import imutils
 import pytesseract
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Users\USER\AppData\Local\Tesseract-OCR'
 
 
 def read_image(image_name):
