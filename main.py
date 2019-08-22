@@ -1,7 +1,5 @@
 import cv2
-import imutils
 import pytesseract
-#pytesseract.pytesseract.tesseract_cmd = r'C:\Users\USER\AppData\Local\Tesseract-OCR'
 
 
 def read_image(image_name):
@@ -61,8 +59,6 @@ def read_image(image_name):
     text = pytesseract.image_to_string(cropped_img, lang = 'eng')
     print(text)
 
-def main():
-    print("hello world!")
 
 if __name__== "__main__":
-    read_image(image_name='images/baza_slika/040603/P1010002.jpg')
+    #read_image(image_name='images/baza_slika/040603/P1010002.jpg')
