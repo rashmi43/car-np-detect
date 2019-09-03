@@ -6,9 +6,14 @@ count_valid = []
 
 def read_image(image_name):
     """function to read an image and convert it to grayscale"""
+    invalid_list = []
     # convert image to grayscale
-    img = cv2.imread(image_name, cv2.COLOR_BGR2GRAY)
+    img = cv2.imread(image_name, 0)
     # print(img)
+
+    ret, thresh = cv2.threshold(img, 10, 255, cv2.THRESH_OTSU)
+    print("Threshold selected : ", ret)
+    cv2.imwrite("./output_image.png", thresh)
 
     #sharpen the image
     gray = cv2.bilateralFilter(img, 11, 17, 17)
@@ -31,6 +36,7 @@ def read_image(image_name):
     cv2.imshow("All contours", img1)
     cv2.waitKey(100)
 
+    new_img = None
     #display top 10 contours
     sorted_cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:10]
     img2 = img.copy()
@@ -56,16 +62,20 @@ def read_image(image_name):
             break
 
     print(NumberPlateCnt)
+
     if NumberPlateCnt is not None:
         cv2.drawContours(img, [NumberPlateCnt], -1, (0, 255, 0), 3)
         cv2.imshow("image with number plate detected", img)
-        cv2.waitKey(100)
+        cv2.waitKey(0)
 
         cropped_img = 'Cropped Images7.png'
+
         text = pytesseract.image_to_string(cropped_img, lang='eng')
-        print(text)
+        print("Detected text: "+text)
         if len(text) > 5:
             count_valid.append(text)
+        else:
+            invalid_list.append(image_name)
         return text
     else:
         return None
@@ -81,13 +91,20 @@ def read_all():
             if '.jpg' in file:
                 files.append(os.path.join(r, file))
 
+    print("File size: "+str(len(f)))
+
     for f in files:
         print("Processing image", f)
         print(read_image(f))
 
+    print("Accuracy: " + str(len(count_valid) / len(f)))
+    print("File size: " + str(len(f)))
+
 
 if __name__ == '__main__':
     read_all()
-    print(len(count_valid))
+    #read_image('./images/baza_slika/141002/Pa140021.jpg')
+    print("Correctly identified: "+str(len(count_valid)))
+
 
 
